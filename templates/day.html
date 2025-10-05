@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+  <a href="/">← Back to challenges</a>
+  <h2>{{ day|capitalize }}</h2>
+  <div class="challenge">{{ content|safe }}</div>
+
+  {% if user %}
+    {% if is_solved %}
+      <p class="solved">You already solved this! ⭐</p>
+    {% else %}
+      <form method="post" action="/submit/{{ day }}">
+        <label>Enter your answer:</label>
+        <input name="answer" required />
+        <button type="submit">Submit</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <p><a href="/login">Login</a> to submit an answer and track progress.</p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Challenges</h2>
+  <p>Open a day to read the story and submit an answer.</p>
+  <ul class="days">
+    {% for d in days %}
+      <li>
+        <a href="/day/{{ d }}">{{ d|capitalize }}</a>
+        {% if d in solved %}
+          <span class="star">⭐</span>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

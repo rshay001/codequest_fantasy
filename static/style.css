@@ -1,0 +1,11 @@
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; max-width: 900px; margin: 0 auto; padding: 1rem; background: #f6f5ff; color: #1f1f2e; }
+header { display:flex; justify-content:space-between; align-items:center; }
+header h1 a { text-decoration:none; color:inherit }
+.days { list-style:none; padding:0 }
+.days li { margin: 0.4rem 0 }
+.challenge { background: white; padding:1rem; border-radius:8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.flashes { list-style:none; padding:0 }
+.flashes li { background: #fff3cd; padding:0.5rem; border-radius:6px; margin-bottom:0.5rem }
+.solved { color: green }
+.star { margin-left:0.6rem }
+footer { margin-top:2rem; color: #6b6b7a }
