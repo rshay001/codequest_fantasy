@@ -1,27 +1,47 @@
-# Day 01 — The Wizard's Counting Spell 🪄
+# Day 1 — A Strange Call
 
-You meet a friendly wizard who gives you a short list of numbers. Sum them to prove your arithmetic skills.
+Detective Yolo has just joined the department when a mysterious 911 call comes in — somewhere inside a massive skyscraper.
 
-**Input:** A list of integers, one per line.
-**Goal:** Output the sum of the numbers.
+Unfortunately, the only clue left for him is a string of parentheses. That’s it. No floor number, no room. Just a jumble of ( and ).
 
-**Example Input:**
-```
-3
--2
-5
--1
-```
+He knows the ground floor is floor 0, and an opening parenthesis, (, means he should go up one floor, and a closing parenthesis, ), means he should go down one floor. The skyscraper is very tall, obviously, but what's even more maddening, is that its basement is very deep. 
 
-**Expected Output:**
-```
-5
-```
+For example:
 
-**Your Task:**
-Write a program that reads integers from input (one per line) until the end of input, then outputs their sum.
+(()) and ()() both result in floor 0.
+((( and (()(()( both result in floor 3.
+))((((( also results in floor 3.
+()) and ))( both result in floor -1 (the first basement level).
+))) and )())()) both result in floor -3.
 
-**Hints for beginners:**
-- You can read input line by line using a loop
-- Convert each line to an integer before adding to your sum
-- Don't forget to handle negative numbers too!
+To what floor will the instruction take Detective Yolo?
+
+###**Hints:**
+- There are two ways to get the input file into your python code:
+
+    ####Method 1: Download and read the file
+   
+        # Download the input file and save it as 'day01_input.txt' in your project folder
+        with open('day01_input.txt', 'r') as file:
+            input_data = file.read().strip()  # Read all text and remove extra whitespace
+
+        print(f"Input length: {len(input_data)}")  # Optional: check how many characters you have
+   
+
+    ####Method 2: copy and paste the input
+
+        # Copy the input from the webpage and paste it as a string
+        input_data = """((()))(()()()((((()(((())(()(()((((((()(()(((())))((()(((()"""  # Your input here
+
+        # Remove any accidental line breaks
+        input_data = input_data.replace('\n', '').replace(' ', '')
+
+    ####Method 3: Fetch directly from URL (advanced)
+
+        import requests
+
+        # Fetch input directly from your local server
+        response = requests.get('http://127.0.0.1:4000/input/day01') #or whatever the url for the input is
+        input_data = response.text.strip()
+
+        print(f"Input length: {len(input_data)}") # Optional: check how many characters you have

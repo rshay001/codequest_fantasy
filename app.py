@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort, request, redirect, url_for, session, flash, jsonify
+from flask import Flask, render_template, abort, request, redirect, url_for, session, flash, jsonify, Response
 from pathlib import Path
 import markdown
 import json
@@ -75,7 +75,7 @@ def day(day):
     if not file.exists():
         abort(404)
     raw = file.read_text()
-    content = markdown.markdown(raw)
+    content = markdown.markdown(raw, extensions=['codehilite', 'fenced_code'])
     user = session.get("username")
     progress = load_progress()
     user_data = progress.get("users", {}).get(user, {}) if user else {}
@@ -119,6 +119,13 @@ def api_progress():
     # small API to fetch progress for UI or other uses
     progress = load_progress()
     return jsonify(progress)
+
+@app.route("/input/<day>")
+def get_input(day):
+    input_file = BASE / "inputs" / f"{day}.txt"
+    if not input_file.exists():
+        abort(404)
+    return Response(input_file.read_text(), mimetype='text/plain')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=4000, debug=True)
