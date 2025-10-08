@@ -4,6 +4,7 @@ import markdown
 import json
 import os
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
 
 BASE = Path(__file__).parent
 CHALLENGES_DIR = BASE / "challenges"
@@ -13,6 +14,28 @@ PROGRESS_FILE = DATA_DIR / "progress.json"
 
 app = Flask(__name__)
 app.secret_key = "replace-this-with-a-random-secret-for-production"
+
+# Database setup
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///local.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+# Database Models
+class UserProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    progress_data = db.Column(db.Text)  # Store JSON as text
+    
+class UserAnswers(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(50), nullable=False)
+    day = db.Column(db.Integer, nullable=False)
+    answer = db.Column(db.String(200))
+
+# Create tables (it's smart, so if the table exists, it won't recreate)
+with app.app_context():
+    db.create_all()
+
 
 # Ensure data dir exists
 DATA_DIR.mkdir(exist_ok=True)
@@ -126,6 +149,8 @@ def get_input(day):
     if not input_file.exists():
         abort(404)
     return Response(input_file.read_text(), mimetype='text/plain')
+
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=4000, debug=True)
