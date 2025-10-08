@@ -1,20 +1,31 @@
-# Day 1 — A Strange Call
+# Day 1 — The Summons to the Castle
 
-Detective Yolo has just joined the department when a mysterious 911 call comes in — somewhere inside a massive skyscraper.
+After a long journey through Hyrule, Link finally reaches the gates of the Forgotten Castle.
+Princess Zelda’s letter was brief:
 
-He only received the address from his unit, no floor number and no apartment number. He asked the lobby security if he noticed anything suspicious. To his surprise, the security guard said, "Detective Yolo is it? I got an envelope for you an hour ago from a visitor." Then handed Yolo the envelope.
+<blockquote><i>“Strange magic stirs beneath the old towers.<br>
+Start from the ground floor. Follow the marks left behind.”</i></blockquote>
 
-Inside the envelope, there are two cards. One is labeled "floor" and the other is labeled "unit". He flipped over the "floor" card, and it is a string of parentheses. That’s it. No floor number, no room. Just a jumble of ( and ). There is a line of fine points explaining that the ground floor is floor 0, and an opening parenthesis, (, means he should go up one floor, and a closing parenthesis, ), means he should go down one floor. 
+Inside the main hall, Link finds a stone tablet etched with a long string of symbols — nothing but curved carvings: ( and ).
+A note beside it reads:
+
+<blockquote><i>“The castle’s stairs rise with ( and descend with ).<br>
+
+The ground floor is 0.<br>
+
+The lowest chamber lies below the earth, and the upper towers reach toward the clouds.”</i></blockquote>
+   
+Link must follow the pattern to discover which floor the magic leads to.
 
 For example:
-
-(()) and ()() both result in floor 0.
-((( and (()(()( both result in floor 3.
-))((((( also results in floor 3.
-()) and ))( both result in floor -1 (the first basement level).
+<blockquote>
+(()) and ()() both result in floor 0.<br>
+((( and (()(()( both result in floor 3.<br>
+))((((( also results in floor 3.<br>
+()) and ))( both result in floor -1 (the first basement level).<br>
 ))) and )())()) both result in floor -3.
-
-To what floor will the instruction take Detective Yolo?
+</blockquote>
+To what floor will the instruction take Link to?
 
 ###**Hints:**
 - There are two ways to get the input file into your python code:

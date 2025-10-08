@@ -1,6 +1,8 @@
-# Day 2 — Which unit
+# Day 2 — The Locked Door
 
-Flipping it over, he finds another cryptic message: multiple lines of mixed symbols like:
+Deeper inside the castle, Link finds a massive door sealed with glowing runes.
+A nearby pedestal holds another stone tablet, marked “Unit.”
+When he touches it, lines of symbols appear:
 ```
 #*#**###*#*##
 
@@ -8,23 +10,22 @@ Flipping it over, he finds another cryptic message: multiple lines of mixed symb
 
 #*#*#*
 ```
+At the bottom, faint text reads:
 
-
-
-At the bottom of the card, there's a note in small print:
-
-"The suspect tried multiple keypad combinations before getting into their apartment. Each line represents one attempt: # means 'press the red button' and * means 'press the blue button'. For each attempt, multiply the red presses by the blue presses. The apartment number equals the sum of all these multiplication results."
+<blockquote>“Each line shows a failed attempt to open the door.<br>
+# marks a strike of the red rune, * a strike of the blue rune.<br>
+For each attempt, multiply the red strikes by the blue strikes.<br>
+The door’s key number is the sum of all results.”</blockquote>
 
 Examples:
-```
-Line 1: #*# has 2 red (#) and 1 blue (*): 2 × 1 = 2
-Line 2: ***## has 2 red (#) and 3 blue (*): 2 × 3 = 6
-Line 3: #*#*#* has 3 red (#) and 3 blue (*): 3 × 3 = 9
-```
-Total apartment number: 2 + 6 + 9 = 17
-Detective Yolo needs to process each keypad attempt, calculate the result for each line, then add them all together to get the final apartment number.
+<blockquote>
+Line 1: #*# has 2 red (#) and 1 blue (*): 2 × 1 = 2 <br>
+Line 2: ***## has 2 red (#) and 3 blue (*): 2 × 3 = 6 <br>
+Line 3: #*#*#* has 3 red (#) and 3 blue (*): 3 × 3 = 9 <br>
+</blockquote>
+Total: 2 + 6 + 9 = 17
 
-Your task: For each line of symbols, count the red (#) and blue (*) presses, multiply them together, then sum all the results to find Detective Yolo's target apartment number.
+Link must calculate the total key number to unlock the door.
 
 ###Hints:
 
