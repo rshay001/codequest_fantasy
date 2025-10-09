@@ -1,5 +1,5 @@
 with open("inputs/day01.txt","r") as file:
-    input_data = file.text.strip()
+    input_data = file.read().strip()
 
 count = 0
 pos = 0

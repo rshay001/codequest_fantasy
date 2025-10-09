@@ -6,16 +6,16 @@ import os
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
+#File paths (for challenges)
 BASE = Path(__file__).parent
 CHALLENGES_DIR = BASE / "challenges"
 DATA_DIR = BASE / "data"
 ANSWERS_FILE = DATA_DIR / "answers.json"
-PROGRESS_FILE = DATA_DIR / "progress.json"
 
 app = Flask(__name__)
 app.secret_key = "replace-this-with-a-random-secret-for-production"
 
-# Database setup
+#========== Database setup ===========
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///local.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -25,49 +25,58 @@ class UserProgress(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     progress_data = db.Column(db.Text)  # Store JSON as text
-    
-class UserAnswers(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), nullable=False)
-    day = db.Column(db.Integer, nullable=False)
-    answer = db.Column(db.String(200))
+
 
 # Create tables (it's smart, so if the table exists, it won't recreate)
 with app.app_context():
     db.create_all()
 
+def check_user(username):
+    existing_user = UserProgress.query.filter_by(username=username).first()
+    if not existing_user:
+        new_user = UserProgress(username=username, progress_data=json.dumps({"solved": [], "last_seen": None}))
+        db.session.add(new_user)
+        db.session.commit()
+        return True #user created
+    return False #user already exists
 
-# Ensure data dir exists
-DATA_DIR.mkdir(exist_ok=True)
+def save_user_progress(progress_dict):
+    username = session.get("username")
+    if not username:
+        return
+    user = UserProgress.query.filter_by(username=username).first()
+    if user:
+        user.progress_data = json.dumps(progress_dict)
+    else: #has a username but no record. Create one.
+        user = UserProgress(username=username, progress_data=json.dumps(progress_dict))
+        db.session.add(user)
+    db.session.commit()
 
-# Load answers
-if not ANSWERS_FILE.exists():
-    # create a placeholder to avoid crashes; actual answers are included in repo
-    ANSWERS_FILE.write_text(json.dumps({}, indent=2))
+def load_user_progress():
+    username = session.get("username")
+    if not username:
+        return {"solved": [], "last_seen": None}
+    user = UserProgress.query.filter_by(username=username).first()
+    if user and user.progress_data:
+        return json.loads(user.progress_data)
+    return {"solved": [], "last_seen": None}
 
-with open(ANSWERS_FILE) as f:
-    ANSWERS = json.load(f)
+def mark_day_solved(day):
+    progress = load_user_progress()
+    if day not in progress.get("solved", []):
+        progress.setdefault("solved", []).append(day)
+        progress["last_seen"] = datetime.now().isoformat() #isoformat for JSON serialization
+        save_user_progress(progress)
 
-# Load or init progress
-if not PROGRESS_FILE.exists():
-    PROGRESS_FILE.write_text(json.dumps({"users": {}}, indent=2))
 
-def load_progress():
-    with open(PROGRESS_FILE) as f:
-        return json.load(f)
-
-def save_progress(data):
-    with open(PROGRESS_FILE, "w") as f:
-        json.dump(data, f, indent=2)
-
+#========== App Stuff ==========
 @app.route("/")
 def index():
     # list available days
     days = sorted([p.stem for p in CHALLENGES_DIR.glob("day*.md")])
     user = session.get("username")
-    progress = load_progress()
-    user_data = progress.get("users", {}).get(user, {}) if user else None
-    solved = set(user_data.get("solved", [])) if user_data else set()
+    progress = load_user_progress()
+    solved = set(progress.get("solved", []))
     return render_template("index.html", days=days, user=user, solved=solved)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -77,13 +86,9 @@ def login():
         if not username:
             flash("Please enter a name.")
             return redirect(url_for("login"))
+        
         session["username"] = username
-        # ensure user exists in progress
-        progress = load_progress()
-        users = progress.setdefault("users", {})
-        users.setdefault(username, {"solved": [], "last_seen": None})
-        users[username]["last_seen"] = datetime.utcnow().isoformat()
-        save_progress(progress)
+        check_user(username)
         return redirect(url_for("index"))
     return render_template("login.html")
 
@@ -97,12 +102,12 @@ def day(day):
     file = CHALLENGES_DIR / f"{day}.md"
     if not file.exists():
         abort(404)
+
     raw = file.read_text()
     content = markdown.markdown(raw, extensions=['codehilite', 'fenced_code'])
     user = session.get("username")
-    progress = load_progress()
-    user_data = progress.get("users", {}).get(user, {}) if user else {}
-    solved = set(user_data.get("solved", [])) if user else set()
+    progress = load_user_progress()
+    solved = set(progress.get("solved", []))
     is_solved = day in solved
     return render_template("day.html", content=content, day=day, user=user, is_solved=is_solved)
 
@@ -112,26 +117,21 @@ def submit(day):
     if not username:
         flash("Please login first.")
         return redirect(url_for("login"))
-    answer = request.form.get("answer", "").strip()
-    if not answer:
+    user_answer = request.form.get("answer", "").strip()
+    if not user_answer:
         flash("Please enter an answer.")
         return redirect(url_for("day", day=day))
-    correct = ANSWERS.get(day)
-    if correct is None:
+    with open(ANSWERS_FILE) as f:
+        answers = json.load(f) #all days' answers, not just today's
+
+    correct_answer = answers.get(day)
+    if correct_answer is None:
         flash("No answer configured for this day. Contact the admin.")
         return redirect(url_for("day", day=day))
 
-    # simple string compare — you can enhance with number parsing, whitespace normalization, etc.
-    normalized = answer.strip()
-    if normalized == str(correct):
+    if user_answer == str(correct_answer):
         # mark progress
-        progress = load_progress()
-        users = progress.setdefault("users", {})
-        user_data = users.setdefault(username, {"solved": [], "last_seen": None})
-        if day not in user_data.get("solved", []):
-            user_data.setdefault("solved", []).append(day)
-            user_data["last_seen"] = datetime.utcnow().isoformat()
-            save_progress(progress)
+        mark_day_solved(day)
         flash("✅ Correct! Star awarded.")
     else:
         flash("❌ Not quite. Try again!")
@@ -140,7 +140,7 @@ def submit(day):
 @app.route("/api/progress")
 def api_progress():
     # small API to fetch progress for UI or other uses
-    progress = load_progress()
+    progress = load_user_progress()
     return jsonify(progress)
 
 @app.route("/input/<day>")

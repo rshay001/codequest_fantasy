@@ -27,3 +27,8 @@ room → repeat “o” → cursed<br>
 door → repeat “o” → cursed<br>
 lamp → all unique → safe<br>
 roar → repeat "r" → cursed<br>
+</blockquote>
+
+###**Hints:**
+The basic method is to check character by character, and count the occurrance. 
+A faster way is to utilize python's "sets". In a set, there cannot be any repeating element, so set of (a, p, p, l, e) will become (a,p,l,e)
