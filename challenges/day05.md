@@ -14,9 +14,9 @@ How many spots has Link returned to at least **once**?
 
 ### Example
 
-/> lands on 2 tiles: one at the starting tile, and one to the east.<br>
-/^>v< lands on 4 tiles, including twice to the same tile that he starts with<br>
-/^v^v^v^v^v lands on only 2 tiles.
+`>` lands on 2 tiles: one at the starting tile, and one to the east.<br>
+`^>v<` lands on 4 tiles, including twice to the same tile that he starts with<br>
+`^v^v^v^v^v` lands on only 2 tiles.
 
 ### **Hints**
 
