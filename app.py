@@ -104,7 +104,7 @@ def day(day):
         abort(404)
 
     raw = file.read_text()
-    content = markdown.markdown(raw, extensions=['codehilite', 'fenced_code'])
+    content = markdown.markdown(raw, extensions=['fenced_code'])
     user = session.get("username")
     progress = load_user_progress()
     solved = set(progress.get("solved", []))
