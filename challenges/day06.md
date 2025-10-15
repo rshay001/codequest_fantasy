@@ -36,7 +36,7 @@ A B C D E F G H I J
 
 Help Link pick a position that will lead to **S**, the sword! Note, for 2-digit starting position, just enter it like a regular 2-digit number, like 10. Not 1, 0.
 
-## **Hints**
+### **Hints**
 Learn about Python dictionary. A dictionary has key: value pair, for example, a dictionary of student report card data may contain:
 ```python
 report_cards={"Stitchy":20, "Baby Stitchy": 19, "Daddy Stitchy": 5}
@@ -46,11 +46,13 @@ in which "Stitchy" is the key and 20 is a value of of the key. This is a common 
 Here are some brief overview:<br>
 
 - Creating and populating a dictionary:<br>
-`report_cards = {} #declare an empty dictionary `
-
+```python
+report_cards = {} #declare an empty dictionary
+```
 - Access value: <br>
-`report_cards["Stitchy"] = 20`
-
+```python
+report_cards["Stitchy"] = 20
+```
 - Look up value:
 
 ```python
