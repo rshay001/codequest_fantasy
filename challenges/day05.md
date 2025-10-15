@@ -21,7 +21,7 @@ How many spots has Link returned to at least **once**?
 ### **Hints**
 
 ```python
-Learn about python Sets. One of the difference between Sets and Lists is that, 
+Similar to Day 4, review python Sets. One of the difference between Sets and Lists is that, 
 members of Sets cannot be repeated. For example:
 List can be ['a','a','b','b','c]
 With the same inputs, Set will be ['a','b','c']
