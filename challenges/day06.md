@@ -15,6 +15,7 @@ This practice board shows 10 starting positions.
 -If starting at 5, the user will get to C, which translates to a chic. 
 -If starting at 3, the user will get to B, a bomb that will explode as soon as the player receives it.
 
+```
 0 0 0 0 0 0 0 0 0 1
 1 2 3 4 5 6 7 8 9 0
 | | | | | | | |-| | 
@@ -31,28 +32,33 @@ This practice board shows 10 starting positions.
 |-| | |-| | | | |-| 
 | | | | |-| |-| | | 
 A B C D E F G H I J
+```
 
-Help Link pick a position that will lead to **S**, the sword!
+Help Link pick a position that will lead to **S**, the sword! Note, for 2-digit starting position, just enter it like a regular 2-digit number, like 10. Not 1, 0.
 
 ## **Hints**
 Learn about Python dictionary. A dictionary has key: value pair, for example, a dictionary of student report card data may contain:
-report_cards={"Stitchy":20, "Baby Stitchy": 19, "Daddy Stitchy": 5} in which "Stitchy" is the key and 20 is a value of of the key. This is a common setup for a grid problem. 
+```python
+report_cards={"Stitchy":20, "Baby Stitchy": 19, "Daddy Stitchy": 5}
+``` 
+in which "Stitchy" is the key and 20 is a value of of the key. This is a common setup for a grid problem. 
 
-Here are some brief overview:
-1. Creating and populating a dictionary:
+Here are some brief overview:<br>
+
+- Creating and populating a dictionary:<br>
 `report_cards = {} #declare an empty dictionary `
 
-2. Access value
-report_cards["Stitchy"] = 20
+- Access value: <br>
+`report_cards["Stitchy"] = 20`
 
-3. Look up value:
-'''
-#Safe - returns None if key doesn't exist (no crash)
-if report_cards.get("Stitchy") == 20:
-    # do something
+- Look up value:
 
-#Unsafe - crashes if key missing  
-if report_cards["Wild Stitchy"] == 12:    # KeyError if Wild Stitchy not a student
-'''
+```python
+    #Safe - returns None if key doesn't exist (no crash)
+    if report_cards.get("Stitchy") == 20:
+        # do something
 
-4. Google how to find Keys by Value. For example, what if you want to know who in the class got 19?
+    #Unsafe - crashes if key missing  
+    if report_cards["Wild Stitchy"] == 12:    # KeyError if Wild Stitchy not a student
+```
+- Google how to find Keys by Value. For example, what if you want to know who in the class got 19?
