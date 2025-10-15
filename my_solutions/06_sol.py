@@ -1,4 +1,4 @@
-with open('inputs/day06 copy.txt') as f:
+with open('inputs/day06.txt') as f:
     inputs = f.read().splitlines()
 
 def understand_data():
@@ -25,7 +25,7 @@ for line in inputs:
 #print(grid)
     
 #Find the starting coordinate (from the bottom)    
-key = next(k for k, v in grid.items() if v=='C')
+key = next(k for k, v in grid.items() if v=='S')
 print(f'key is: {key}')
 
 def walk(coor):
